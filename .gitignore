@@ -1,0 +1,4 @@
+# do not upload these directories do github
+creds
+venv
+.idea/
