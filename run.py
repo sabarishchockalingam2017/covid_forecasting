@@ -1,16 +1,25 @@
-# This is a sample Python script.
+import argparse
+import logging.config
+from config.main_config import LOGGING_PATH, LOGGING_CONFIG
+from app.app import app
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+''' This is a central location to run all files.'''
 
+logging.config.fileConfig(LOGGING_CONFIG,
+                          disable_existing_loggers=False,
+                          defaults={'log_dir': LOGGING_PATH})
+logger = logging.getLogger("run_covid_forecasting")
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+def run_app():
+    'Boots up app on server.'
+    app.run(debug=app.config['DEBUG'], port=app.config['PORT'])
 
+if __name__=='__main__':
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+    parser = argparse.ArgumentParser(description="Run app or source code")
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    subparsers = parser.add_subparsers()
+
+    args = parser.parse_args()
+
+    run_app()
