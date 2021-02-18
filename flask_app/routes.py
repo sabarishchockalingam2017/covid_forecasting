@@ -1,23 +1,13 @@
-from flask import Flask, render_template, url_for, flash
-import logging
-import logging.config
+"""Routes for parent Flask app."""
 import os
-import pandas as pd
-from pathlib import Path
+from flask import render_template, url_for
+from flask import current_app as app
 
-'''This is the flask app and builds the webpage interface for the analysis.'''
-
-app = Flask(__name__)
-app.config.from_object('config.flask_config')
-
-
-logger = logging.getLogger("app")
 
 @app.route("/", methods=['GET','POST'])
 @app.route("/home", methods=['GET','POST'])
 def home():
 
-    # world map showing reporting cities
     return render_template('home.html')
 
 

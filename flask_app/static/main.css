@@ -1,15 +1,15 @@
 body {
-  background: #fafafa;
+  background: #858585;
   color: #333333;
-  margin-top: 5rem;
+  margin-top: 3rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
   color: #444444;
 }
 
-.bg-steel {
-  background-color: #5f788a;
+.bg-cred {
+  background-color: #e05a5a;
 }
 
 .site-header .navbar-nav .nav-link {
@@ -25,10 +25,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .content-section {
-  background: #ffffff;
+  background: #bfc4c9;
   padding: 10px 20px;
   border: 1px solid #dddddd;
   border-radius: 3px;
   margin-bottom: 20px;
+}
+
+.dash-dropdown{
+    width:500%;
 }
 
