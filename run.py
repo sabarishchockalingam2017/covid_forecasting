@@ -1,7 +1,7 @@
 import argparse
 import logging.config
 from config.main_config import LOGGING_PATH, LOGGING_CONFIG
-from app.app import app
+from flask_app.app import app
 
 ''' This is a central location to run all files.'''
 
@@ -11,12 +11,12 @@ logging.config.fileConfig(LOGGING_CONFIG,
 logger = logging.getLogger("run_covid_forecasting")
 
 def run_app():
-    'Boots up app on server.'
+    'Boots up flask_app on server.'
     app.run(debug=app.config['DEBUG'], port=app.config['PORT'])
 
 if __name__=='__main__':
 
-    parser = argparse.ArgumentParser(description="Run app or source code")
+    parser = argparse.ArgumentParser(description="Run flask_app or source code")
 
     subparsers = parser.add_subparsers()
 
