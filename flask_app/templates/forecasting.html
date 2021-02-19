@@ -6,6 +6,25 @@
                 Loading...
             </div>
         </div>
+        <div class="textsect">
+            <h4>Forecasting Breakdown</h4>
+            <p>
+                Time series data can be broken down into trend, seasonal and random aspects. Forecast models attempt to
+                fit these aspects in past data to predict future observations of the series. A trend is the tendency for the series
+                to steadily increase or decrease. Seasonality describes a consistently repeating pattern which repeats
+                every given period (eg. weekly, quarterly or annual periods). The random aspect of the data is caused
+                by noise or external factors which cannot be accounted for by analyzing past data points.<br>
+                <br>
+                The ARIMA model is the most popular for modelling time series. ARIMA is appropriate for time series with
+                or without a trend but is not appropriate for seasonal data. Holt or Exponential Weighted
+                Moving Average (EWMA) can also be used to model trend. When seasonality is involved SARIMA and
+                Holt-Winters models should be used. If the series data exhibits neither trend nor seasonality
+                simpler approaches such as moving average, simple exponential smooth or the naive
+                approach (which is just using the last observed value as the forecast for the future) can also be a resort.<br>
+                <br>
+
+            </p>
+        </div>
     </div>
     {{ footer|safe }}
 {% endblock content %}
