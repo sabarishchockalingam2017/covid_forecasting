@@ -25,6 +25,6 @@ def arima_prediction(traindf, testdf):
     # merge for plotting
     tsdf = pd.merge(traindf, testdf, how='outer', on='Date')
     tsdf = pd.merge(tsdf, pyhat, how='outer', on='Date')
-    tsdf.columns = ['Training Data', 'Test Data', 'Forecast']
+    tsdf.columns = ['Training Data', 'Test Data', 'ARIMA - Forecast']
 
     return tsdf

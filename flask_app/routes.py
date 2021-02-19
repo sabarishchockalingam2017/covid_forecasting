@@ -1,14 +1,14 @@
 """Routes for parent Flask app."""
 import os
-from flask import render_template, url_for
+from flask import render_template, url_for, redirect
 from flask import current_app as app
 
 
 @app.route("/", methods=['GET','POST'])
 @app.route("/home", methods=['GET','POST'])
 def home():
-
-    return render_template('home.html')
+    """Redirects to forecasting page"""
+    return redirect('/forecasting/')
 
 
 @app.context_processor
