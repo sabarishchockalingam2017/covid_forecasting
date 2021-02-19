@@ -45,7 +45,7 @@ def create_dashboard(server, countrydf):
 
     # Create Dash Layout
     dash_app.layout = html.Div([
-        html.H1("COVID-19 Forecasting - ARIMA Model"),
+        html.H1("COVID-19 Forecasting"),
         dcc.Graph(id='graph'),
         html.Label([
             "Country",
@@ -60,11 +60,11 @@ def create_dashboard(server, countrydf):
     ])
 
     # route to arima dash
-    @server.route('/arimadash/')
+    @server.route('/forecasting/')
     def arimadashapp():
         soup = BeautifulSoup(dash_app.index(),'html.parser')
         footer = soup.footer
-        return render_template('arimadash.html', title='ARIMA', footer=footer)
+        return render_template('forecasting.html', title='Forecasting Models', footer=footer)
 
     # Define callback to update graph
     @dash_app.callback(
