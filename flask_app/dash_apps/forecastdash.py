@@ -6,7 +6,7 @@ from dash.dependencies import Input, Output
 from bs4 import BeautifulSoup
 from flask import render_template
 import pandas as pd
-from src.build_model import arima_prediction
+from src.build_model import arima_prediction, hw_prediction
 import numpy as np
 
 def create_dashboard(server, countrydf):
@@ -45,23 +45,26 @@ def create_dashboard(server, countrydf):
 
     # Create Dash Layout
     dash_app.layout = html.Div([
-        html.H1("COVID-19 Forecasting"),
-        dcc.Graph(id='graph'),
-        html.Label([
-            "Country",
-            dcc.Dropdown(
-                id='country-dropdown', clearable=False,
-                value='US', options=[
-                {'label': c[0] + c[1], 'value': c[0]}
-                for c in zip(countrydf.columns[1:],
-                             countrydf.iloc[0,1:].replace(np.nan,'').apply(lambda x:'' if x=='' else ' - '+x))
-            ])
-        ]),
-    ])
+                            html.H1("COVID-19 Forecasting"),
+                            dcc.Loading(id="loading-graph",
+                                        type="default",
+                                        children=dcc.Graph(id='graph')
+                                        ),
+                            html.Label([
+                                "Country",
+                                dcc.Dropdown(
+                                    id='country-dropdown', clearable=False,
+                                    value='US', options=[
+                                    {'label': c[0] + c[1], 'value': c[0]}
+                                    for c in zip(countrydf.columns[1:],
+                                                 countrydf.iloc[0,1:].replace(np.nan,'').apply(lambda x:'' if x=='' else ' - '+x))
+                                ])
+                            ]),
+                        ])
 
     # route to arima dash
     @server.route('/forecasting/')
-    def arimadashapp():
+    def forecastdashapp():
         soup = BeautifulSoup(dash_app.index(),'html.parser')
         footer = soup.footer
         return render_template('forecasting.html', title='Forecasting Models', footer=footer)
@@ -86,6 +89,8 @@ def create_dashboard(server, countrydf):
         testdata = tsdata.iloc[sersplit - 1:]
 
         plotdf = arima_prediction(traindata, testdata)
+        hw_pred = hw_prediction(traindata, testdata)
+        plotdf = plotdf.merge(hw_pred, how='outer', on='Date')
 
         fig = px.line(plotdf, title='Confirmed Cases Forecasting - {country}'.format(country=country),
                       labels={'y': 'Confirmed Cases'})
