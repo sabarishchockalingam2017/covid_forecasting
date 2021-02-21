@@ -1,9 +1,14 @@
-'''Functions to build forecasting models.'''
+
 import pandas as pd
 from pmdarima import auto_arima
 import numpy as np
 from itertools import product
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
+import logging.config
+
+'''Functions to build forecasting models.'''
+
+logger = logging.getLogger("build_model")
 
 def arima_prediction(traindf, testdf):
     """ Uses auto_arima to find order and build best ARIMA model
@@ -19,17 +24,19 @@ def arima_prediction(traindf, testdf):
     # make predictions
     test_horizon = len(testdf) - 1
     model = auto_arima(traindf)
+    country_name = traindf.columns[0]
     preddates = pd.date_range(traindf.index[-1], periods=test_horizon + 1, freq=traindf.index.freq)[1:]
     pred = pd.Series(model.predict(n_periods=test_horizon), index=preddates)
     pyhat = pd.Series(traindf.tail(1).squeeze(), index=[traindf.index[-1]]).append(pred)
     pyhat.rename_axis('Date', inplace=True)
-    pyhat.rename(traindf.columns[0], inplace=True)
+    pyhat.rename(country_name, inplace=True)
 
     # merge for plotting
     tsdf = pd.merge(traindf, testdf, how='outer', on='Date')
     tsdf = pd.merge(tsdf, pyhat, how='outer', on='Date')
     tsdf.columns = ['Training Data', 'Test Data', 'ARIMA - Forecast']
 
+    logger.info("ARIMA model built for {}.".format(country_name))
     return tsdf
 
 def hw_prediction(traindf, testdf):
@@ -60,5 +67,7 @@ def hw_prediction(traindf, testdf):
     pyhat = pd.Series(traindf.tail(1).squeeze(), index=[traindf.index[-1]]).append(pred)
     pyhat.rename_axis('Date', inplace=True)
     pyhat.rename('Holt-Winters - Forecast', inplace=True)
+
+    logger.info("Holt-Winter model built for {}.".format(country_name))
 
     return pyhat
