@@ -1,0 +1,3 @@
+# ignore log files in log directory except gitignore
+*
+!.gitignore
