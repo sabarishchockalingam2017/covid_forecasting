@@ -45,7 +45,7 @@ def create_dashboard(server, countrydf):
 
     # Create Dash Layout
     dash_app.layout = html.Div([
-                            html.H1("COVID-19 Forecasting"),
+                            html.H4("COVID-19 Forecasting"),
                             dcc.Loading(id="loading-graph",
                                         type="default",
                                         children=dcc.Graph(id='graph')
@@ -88,12 +88,43 @@ def create_dashboard(server, countrydf):
         traindata = tsdata.iloc[:sersplit]
         testdata = tsdata.iloc[sersplit - 1:]
 
-        plotdf = arima_prediction(traindata, testdata)
-        hw_pred = hw_prediction(traindata, testdata)
+        plotdf = pd.merge(traindata, testdata, how='outer', on='Date')
+        plotdf.columns = ['Train Data', 'Test Data']
+
+        # arima prediction
+        arimadf, arimametrics = arima_prediction(traindata, testdata)
+        plotdf = pd.merge(plotdf, arimadf, how='outer', on='Date')
+
+        # holt-winters prediction
+        hw_pred, hw_metrics = hw_prediction(traindata, testdata)
         plotdf = plotdf.merge(hw_pred, how='outer', on='Date')
 
         fig = px.line(plotdf, title='Confirmed Cases Forecasting - {country}'.format(country=country),
                       labels={'y': 'Confirmed Cases'})
+
+        # adding end of observed data line
+        fig.add_vline(x=tsdata.index[-1],
+                      line_width=3,
+                      line_dash='dash',
+                      line_color='red')
+        fig.add_vrect(x0=tsdata.index[-63], x1=tsdata.index[-1],
+                      annotation_text="End of Observed Data",
+                      annotation_position="top right",
+                      line_width=0)
+
+        # adding metrics
+        metrics_text = "ARIMA RMSE: {}<br> ARIMA MAPE: {}<br> Holt-Winters RMSE: {}<br> Holt-Winters MAPE: {}"\
+            .format(round(arimametrics['rmse'], 2), round(arimametrics['mape'], 2),
+                    round(hw_metrics['rmse'], 2), round(hw_metrics['mape'], 2))
+
+        fig.add_annotation(x=1.24,
+                           y=0.2,
+                           xref="paper",
+                           yref="paper",
+                           showarrow=False,
+                           align="left",
+                           text=metrics_text)
+
         fig.update_layout(yaxis_title="Confirmed Cases",
                           legend_title=None)
         return fig
