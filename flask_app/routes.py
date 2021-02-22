@@ -10,6 +10,13 @@ def home():
     """Redirects to forecasting page"""
     return redirect('/forecasting/')
 
+@app.route("/methodology")
+@app.route("/methodology/")
+def method_page():
+    """Rendering to methodology page"""
+    return render_template('methodology.html')
+
+
 
 @app.context_processor
 def override_url_for():
