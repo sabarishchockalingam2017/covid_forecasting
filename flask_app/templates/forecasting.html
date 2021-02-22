@@ -6,25 +6,19 @@
                 Loading...
             </div>
         </div>
-        <div class="textsect">
-            <h4>Forecasting Breakdown</h4>
-            <p>
-                Time series data can be broken down into trend, seasonal and random aspects. Forecast models attempt to
-                fit these aspects in past data to predict future observations of the series. A trend is the tendency for the series
-                to steadily increase or decrease. Seasonality describes a consistently repeating pattern which repeats
-                every given period (eg. weekly, quarterly or annual periods). The random aspect of the data is caused
-                by noise or external factors which cannot be accounted for by analyzing past data points.<br>
-                <br>
-                The Autoregressive Integrated Moving Average (ARIMA) model is the most popular model used for time series forecasting.
-                ARIMA is appropriate for time series with or without a trend but is not appropriate for seasonal data.
-                Holt or Exponential Weighted
-                Moving Average (EWMA) can also be used to model trend. When seasonality is involved Seasonal ARIMA (SARIMA) and
-                Holt-Winters models can be used. If the series data exhibits neither trend nor seasonality
-                simpler approaches such as moving average, simple exponential smooth or the naive
-                approach (which is just using the last observed value as the forecast) can also be a resort.<br>
-                <br>
+        <div>
+            <p>*Data obtained from
+            <a href="https://github.com/CSSEGISandData/COVID-19">
+                Repository by the Center for Systems Science and Engineering (CSSE) at Johns
+                Hopkins University
+            </a>
+            organized for convenient use at
+            <a href="https://www.kaggle.com/antgoldbloom/covid19-data-from-john-hopkins-university">
+                Kaggle.
+            </a>
             </p>
         </div>
+
     </div>
     {{ footer|safe }}
 {% endblock content %}
